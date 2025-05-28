@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Spots Filled</title>
+<style>
+body {
+    margin: 0;
+background-color: #1e1e2f;
+font-family: "Comic Sans MS", "Segoe UI", sans-serif;
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+text-align: center;
+}
+
+.container {
+    padding: 30px;
+border-radius: 12px;
+background: #2b2b3c;
+box-shadow: 0 0 20px rgba(0,0,0,0.5);
+width: 300px;
+}
+
+.counter-text {
+    font-size: 28px;
+font-weight: bold;
+margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+height: 18px;
+border-radius: 10px;
+background-color: #444;
+overflow: hidden;
+margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+width: 0%;
+background: linear-gradient(90deg, #00c6ff, #0072ff);
+transition: width 0.8s ease-in-out;
+}
+
+.percentage {
+    font-size: 14px;
+color: #aaa;
+}
+</style>
+  </head>
+    <body>
+    <div class="container">
+<div class="counter-text" id="counterText">Loading...</div>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+<div class="percentage" id="percentageText"></div>
+</div>
+
+<script>
+// Replace this with your real Apps Script endpoint
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbz7fzudsyJdFALPg_3faqPRiqwG2tQ2E5RlN7kx-5Co2iTHjw5AcEle2easFXGb36eIDw/exec";
+
+async function updateCounter() {
+try {
+const res = await fetch(ENDPOINT);
+const data = await res.json();
+
+const count = data.count || 0;
+const max = data.max || 1;
+const percent = Math.min(count / max, 1);
+const rounded = Math.round(percent * 100);
+
+document.getElementById("counterText").textContent = `${count} spots filled / ${max}`;
+document.getElementById("progressFill").style.width = `${rounded}%`;
+document.getElementById("percentageText").textContent = `${rounded}% full`;
+} catch (err) {
+document.getElementById("counterText").textContent = "Error loading data";
+console.error(err);
+}
+}
+
+updateCounter();
+</script>
+  </body>
+    </html>
